@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แบบสำรวจและลงทะเบียนตัวแทนจำหน่ายเครื่องปรับอากาศ (HVAC Dealer Survey)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Prompt & Sarabun for Thai typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            prompt: ['Prompt', 'sans-serif'],
+            sarabun: ['Sarabun', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+              800: '#0c4a6e',
+              900: '#082f49',
+            },
+            cool: {
+              500: '#06b6d4',
+              600: '#0891b2',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Sarabun', sans-serif;
+    }
+    h1, h2, h3, h4, h5, h6, .font-heading {
+      font-family: 'Prompt', sans-serif;
+    }
+    /* Custom smooth transition */
+    .form-input-focus {
+      transition: all 0.2s ease-in-out;
+    }
+    .form-input-focus:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen antialiased flex flex-col selection:bg-brand-500 selection:text-white">
+
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-sky-500 flex items-center justify-center text-white shadow-md shadow-sky-500/20">
+          <!-- Snowflake / Cool AC icon -->
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v20m0-20l3 3m-3-3l-3 3m3 17l3-3m-3 3l-3-3M2 12h20M2 12l3 3m-3-3l3-3m17 3l-3 3m3-3l-3-3m-3.5-3.5l11-11m-11 11l3-1m-3 1l1-3m-8 8l11 11m-11-11l-3 1m3-1l-1 3" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="font-bold text-slate-800 text-lg sm:text-xl font-heading leading-tight">Air Condition Dealer Partner</h1>
+          <p class="text-xs text-slate-500">แบบสำรวจและขึ้นทะเบียนตัวแทนจำหน่ายเครื่องปรับอากาศ</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <!-- Settings/Webhook Modal Trigger Button -->
+        <button id="openConfigBtn" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg transition-colors">
+          <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+          </svg>
+          <span class="hidden sm:inline">ตั้งค่า Google Sheet</span>
+          <span class="sm:hidden">ตั้งค่า</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="flex-grow max-w-3xl mx-auto w-full px-4 py-8">
+    
+    <!-- Hero / Information Card -->
+    <div class="mb-8 p-6 sm:p-8 bg-gradient-to-br from-slate-900 via-sky-950 to-brand-900 rounded-3xl text-white shadow-xl relative overflow-hidden border border-sky-800/40">
+      <!-- Decorative background glow -->
+      <div class="absolute -right-16 -top-16 w-60 h-60 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-12 -bottom-12 w-48 h-48 bg-sky-500/20 rounded-full blur-2xl pointer-events-none"></div>
+      
+      <div class="relative z-10">
+        <div class="flex flex-wrap items-center gap-2 mb-3">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-sky-500/20 backdrop-blur-md rounded-full text-xs font-medium tracking-wide text-cyan-200 border border-sky-400/30">
+            <svg class="w-3.5 h-3.5 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            โครงการรับสมัครคู่ค้า & ศูนย์บริการติดตั้งแอร์
+          </span>
+          <span class="text-xs text-sky-300/80">ระบบบันทึกอัตโนมัติลง Google Sheets</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-bold font-heading mb-2 leading-snug">
+          แบบลงทะเบียนร้านค้าและตัวแทนจำหน่ายแอร์
+        </h2>
+        <p class="text-sky-100/90 text-sm sm:text-base leading-relaxed max-w-2xl font-normal">
+          ร่วมเป็นพันธมิตรทางธุรกิจกับเรา เพื่อรับสิทธิพิเศษโครงสร้างราคาส่งเครื่องปรับอากาศทุกขนาด (Wall Type / Cassette / Commercial), ส่วนลดอะไหล่แท้, โควตางานติดตั้งประจำพื้นที่ และบริการส่งสินค้าด่วนถึงหน้าร้านหรือหน้างาน
+        </p>
+      </div>
+    </div>
+
+    <!-- Active Webhook Status Indicator Banner -->
+    <div id="webhookStatusBanner" class="mb-6 p-3.5 rounded-xl border border-sky-200 bg-sky-50/80 flex items-center justify-between text-xs text-sky-900">
+      <div class="flex items-center gap-2">
+        <span class="relative flex h-2.5 w-2.5">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+        </span>
+        <span id="webhookStatusText">สถานะ: บันทึกข้อมูลเข้า Google Sheets แบบอัตโนมัติ</span>
+      </div>
+      <button type="button" onclick="document.getElementById('openConfigBtn').click()" class="text-sky-700 hover:text-sky-900 font-medium underline">
+        ตั้งค่า Google Sheet
+      </button>
+    </div>
+
+    <!-- The Form -->
+    <form id="dealerSurveyForm" class="space-y-8 bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-200" novalidate>
+      
+      <!-- Section 1: ข้อมูลร้านค้าและตัวตน -->
+      <div>
+        <div class="flex items-center gap-3 border-b border-slate-100 pb-3 mb-6">
+          <div class="w-8 h-8 rounded-lg bg-sky-100 text-sky-800 flex items-center justify-center font-bold text-sm">1</div>
+          <div>
+            <h3 class="font-heading font-semibold text-slate-800 text-lg">ข้อมูลร้านค้า / บริษัท และผู้ติดต่อ</h3>
+            <p class="text-xs text-slate-500">ระบุชื่อร้านค้า เบอร์โทรศัพท์ และช่องทางประสานงานหลัก</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Store Name (Required) -->
+          <div class="sm:col-span-2">
+            <label for="storeName" class="block text-sm font-medium text-slate-700 mb-1">
+              ชื่อร้านค้า / บริษัท / ทีมช่างแอร์ <span class="text-rose-500 font-bold">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="storeName" 
+              name="storeName" 
+              required
+              placeholder="เช่น ร้านเจริญแอร์แอนด์เซอร์วิส หรือ บจก. สยามคูลลิ่งเอ็นจิเนียริ่ง"
+              class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none form-input-focus text-slate-800 bg-slate-50/50"
+            />
+            <p class="hidden text-xs text-rose-500 mt-1" id="storeNameError">กรุณาระบุชื่อร้านค้าหรือบริษัท</p>
+          </div>
+
+          <!-- Contact Person Name (Required) -->
+          <div>
+            <label for="contactName" class="block text-sm font-medium text-slate-700 mb-1">
+              ชื่อ-นามสกุล เจ้าของร้าน / ผู้จัดการฝ่ายจัดซื้อ <span class="text-rose-500 font-bold">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="contactName" 
+              name="contactName" 
+              required
+              placeholder="เช่น ช่างวิชัย เย็นสบาย"
+              class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none form-input-focus text-slate-800 bg-slate-50/50"
+            />
+            <p class="hidden text-xs text-rose-500 mt-1" id="contactNameError">กรุณาระบุชื่อผู้ติดต่อ</p>
+          </div>
+
+          <!-- Phone Number (Required) -->
+          <div>
+            <label for="phone" class="block text-sm font-medium text-slate-700 mb-1">
+              เบอร์โทรศัพท์ติดต่อ (ใช้รับออเดอร์/ส่งของ) <span class="text-rose-500 font-bold">*</span>
+            </label>
+            <input 
+              type="tel" 
+              id="phone" 
+              name="phone" 
+              required
+              placeholder="เช่น 0812345678"
+              maxlength="12"
+              class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none form-input-focus text-slate-800 bg-slate-50/50"
+            />
+            <p class="hidden text-xs text-rose-500 mt-1" id="phoneError">กรุณาระบุเบอร์โทรศัพท์ 9-10 หลัก</p>
+          </div>
+
+          <!-- LINE ID (Recommended for AC dealers) -->
+          <div>
+            <label for="lineId" class="block text-sm font-medium text-slate-700 mb-1">
+              LINE ID หรือ เบอร์โทรที่ผูก LINE <span class="text-sky-600 font-normal text-xs">(แนะนำเพื่อรับใบเสนอราคาด่วน)</span>
+            </label>
+            <input 
+              type="text" 
+              id="lineId" 
+              name="lineId" 
+              placeholder="เช่น @wichai-air หรือ 0812345678"
+              class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none form-input-focus text-slate-800 bg-slate-50/50"
+            />
+          </div>
+
+          <!-- Tax ID / Business Registration (Optional) -->
+          <div>
+            <label for="taxId" class="block text-sm font-medium text-slate-700 mb-1">
+              เลขประจำตัวผู้เสียภาษี (ถ้าต้องการเปิดใบกำกับภาษี)
+            </label>
+            <input 
+              type="text" 
+              id="taxId" 
+              name="taxId" 
+              placeholder="เลข 13 หลัก"
+              maxlength="13"
+              class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none form-input-focus text-slate-800 bg-slate-50/50"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: ที่อยู่หน้าร้าน/โกดัง และสถานที่จัดส่งแอร์ -->
+      <div>
+        <div class="flex items-center gap-3 border-b border-slate-100 pb-3 mb-6">
+          <div class="w-8 h-8 rounded-lg bg-sky-100 text-sky-800 flex items-center justify-center font-bold text-sm">2</div>
+          <div>
+            <h3 class="font-heading font-semibold text-slate-800 text-lg">ที่อยู่ร้านค้า / โกดังพักสต็อกแอร์</h3>
+            <p class="text-xs text-slate-500">สำหรับส่งเอกสารสัญญา และรถกระบะ/หกล้อจัดส่งแอร์ลงหน้าร้าน</p>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <!-- Street Address -->
+          <div>
+            <label for="address" class="block text-sm font-medium text-slate-700 mb-1">
+              เลขที่ตั้ง, อาคาร, ซอย, ถนน <span class="text-rose-500 font-bold">*</span>
+            </label>
+            <textarea 
+              id="address" 
+              name="address" 
+              rows="2" 
+              required
+              placeholder="เช่น เลขที่ 88/9 หมู่ 4 ถนนศรีนครินทร์..."
+              class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none form-input-focus text-slate-800 bg-slate-50/50"
+            ></textarea>
+            <p class="hidden text-xs text-rose-500 mt-1" id="addressError">กรุณาระบุที่อยู่</p>
+          </div>
+
+          <!-- District / Sub-district / Province / Postal code -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+            <div>
+              <label for="subdistrict" class="block text-xs font-medium text-slate-600 mb-1">ตำบล / แขวง <span class="text-rose-500">*</span></label>
+              <input 
+                type="text" 
+                id="subdistrict" 
+                name="subdistrict" 
+                required
+                class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none form-input-focus bg-slate-50/50"
+              />
+            </div>
+            <div>
+              <label for="district" class="block text-xs font-medium text-slate-600 mb-1">อำเภอ / เขต <span class="text-rose-500">*</span></label>
+              <input 
+                type="text" 
+                id="district" 
+                name="district" 
+                required
+                class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none form-input-focus bg-slate-50/50"
+              />
+            </div>
+            <div>
+              <label for="province" class="block text-xs font-medium text-slate-600 mb-1">จังหวัด <span class="text-rose-500">*</span></label>
+              <input 
+                type="text" 
+                id="province" 
+                name="province" 
+                required
+                class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none form-input-focus bg-slate-50/50"
+              />
+            </div>
+            <div>
+              <label for="postalCode" class="block text-xs font-medium text-slate-600 mb-1">รหัสไปรษณีย์ <span class="text-rose-500">*</span></label>
+              <input 
+                type="text" 
+                id="postalCode" 
+                name="postalCode" 
+                maxlength="5"
+                required
+                placeholder="10250"
+                class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none form-input-focus bg-slate-50/50"
+              />
+            </div>
+          </div>
+          <p class="hidden text-xs text-rose-500 mt-1" id="locationError">กรุณาระบุข้อมูลตำบล อำเภอ จังหวัด และรหัสไปรษณีย์ให้ครบถ้วน</p>
+
+          <!-- Map Link (Optional) -->
+          <div>
+            <label for="mapUrl" class="block text-xs font-medium text-slate-600 mb-1">
+              ลิงก์พิกัด Google Maps หน้าร้าน หรือโกดัง (สำหรับนำทางรถขนส่ง)
+            </label>
+            <input 
+              type="url" 
+              id="mapUrl" 
+              name="mapUrl" 
+              placeholder="https://maps.app.goo.gl/..."
+              class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none form-input-focus bg-slate-50/50 text-slate-700"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: ข้อมูลธุรกิจเครื่องปรับอากาศและศักยภาพตัวแทน (AC Dealer Profile) -->
+      <div>
+        <div class="flex items-center gap-3 border-b border-slate-100 pb-3 mb-6">
+          <div class="w-8 h-8 rounded-lg bg-sky-100 text-sky-800 flex items-center justify-center font-bold text-sm">3</div>
+          <div>
+            <h3 class="font-heading font-semibold text-slate-800 text-lg">แบบสำรวจรูปแบบธุรกิจและศักยภาพงานแอร์</h3>
+            <p class="text-xs text-slate-500">ข้อมูลนี้ช่วยให้จัดระดับดีลเลอร์ ราคาหน้าตั๋ว ส่วนลดเงินสด และเครดิตเทอม</p>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <!-- AC Business Model -->
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-2">
+              ลักษณะการดำเนินงานหลักของร้านท่าน <span class="text-rose-500 font-bold">*</span>
+            </label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5">
+              <label class="relative flex items-center p-3 rounded-xl border border-slate-200 hover:border-sky-500 bg-slate-50/50 cursor-pointer has-[:checked]:bg-sky-50/90 has-[:checked]:border-sky-600 transition-all">
+                <input type="radio" name="businessType" value="ร้านขายแอร์พร้อมติดตั้งปลีก" checked class="text-sky-600 focus:ring-sky-500">
+                <span class="ml-2 text-xs font-medium text-slate-800">ขายปลีก + ติดตั้งบ้าน/คอนโด</span>
+              </label>
+              <label class="relative flex items-center p-3 rounded-xl border border-slate-200 hover:border-sky-500 bg-slate-50/50 cursor-pointer has-[:checked]:bg-sky-50/90 has-[:checked]:border-sky-600 transition-all">
+                <input type="radio" name="businessType" value="ผู้รับเหมาแอร์อาคาร/โปรเจกต์" class="text-sky-600 focus:ring-sky-500">
+                <span class="ml-2 text-xs font-medium text-slate-800">งานโครงการ / ระบบ VRV-VRF</span>
+              </label>
+              <label class="relative flex items-center p-3 rounded-xl border border-slate-200 hover:border-sky-500 bg-slate-50/50 cursor-pointer has-[:checked]:bg-sky-50/90 has-[:checked]:border-sky-600 transition-all">
+                <input type="radio" name="businessType" value="ช่างอิสระ / งานล้างซ่อมบำรุง" class="text-sky-600 focus:ring-sky-500">
+                <span class="ml-2 text-xs font-medium text-slate-800">ช่างอิสระ / ล้างซ่อมแอร์</span>
+              </label>
+              <label class="relative flex items-center p-3 rounded-xl border border-slate-200 hover:border-sky-500 bg-slate-50/50 cursor-pointer has-[:checked]:bg-sky-50/90 has-[:checked]:border-sky-600 transition-all">
+                <input type="radio" name="businessType" value="ยี่ปั๊วขายส่งแอร์และอะไหล่" class="text-sky-600 focus:ring-sky-500">
+                <span class="ml-2 text-xs font-medium text-slate-800">ค้าส่งแอร์ / ร้านอะไหล่แอร์</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Number of Tech Teams & Volume -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="technicianCount" class="block text-sm font-medium text-slate-700 mb-1">
+                จำนวนทีมช่างติดตั้งประจำร้าน <span class="text-rose-500 font-bold">*</span>
+              </label>
+              <select 
+                id="technicianCount" 
+                name="technicianCount"
+                class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none form-input-focus text-slate-800 bg-slate-50/50"
+              >
+                <option value="1-2 ทีม (2-4 คน)">1 - 2 ทีมช่าง (2-4 คน)</option>
+                <option value="3-5 ทีม (6-10 คน)">3 - 5 ทีมช่าง (6-10 คน)</option>
+                <option value="มากกว่า 5 ทีมขึ้นไป">มากกว่า 5 ทีมช่างขึ้นไป</option>
+                <option value="เน้นส่งต่อทีม Sub-contract">เน้นใช้ทีมช่าง Sub-contract นอก</option>
+                <option value="ไม่มีทีมช่าง (เน้นขายส่งอย่างเดียว)">ไม่มีทีมช่าง (เน้นขายส่งหน้าร้านอย่างเดียว)</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="monthlySales" class="block text-sm font-medium text-slate-700 mb-1">
+                ยอดจำหน่าย/ติดตั้งเฉลี่ยต่อเดือน (เครื่อง) <span class="text-rose-500 font-bold">*</span>
+              </label>
+              <select 
+                id="monthlySales" 
+                name="monthlySales"
+                class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none form-input-focus text-slate-800 bg-slate-50/50"
+              >
+                <option value="1 - 15 เครื่อง / เดือน">1 - 15 เครื่อง / เดือน (เริ่มต้น / ร้านขนาดย่อม)</option>
+                <option value="16 - 40 เครื่อง / เดือน">16 - 40 เครื่อง / เดือน (ร้านมาตรฐาน)</option>
+                <option value="41 - 80 เครื่อง / เดือน">41 - 80 เครื่อง / เดือน (ยอดขายระดับกลาง)</option>
+                <option value="81 - 150 เครื่อง / เดือน">81 - 150 เครื่อง / เดือน (ดีลเลอร์ใหญ่)</option>
+                <option value="มากกว่า 150 เครื่องขึ้นไป">มากกว่า 150 เครื่องขึ้นไป (ดีลเลอร์รายใหญ่ / งานโครงการ)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Existing AC Brands Sold -->
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-2">
+              แบรนด์เครื่องปรับอากาศที่ร้านจำหน่ายอยู่ในปัจจุบัน (เลือกได้หลายข้อ)
+            </label>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+              <label class="flex items-center space-x-2 p-2 rounded-lg bg-slate-50 border border-slate-200 hover:border-sky-400 cursor-pointer">
+                <input type="checkbox" name="currentBrands" value="Daikin" class="rounded text-sky-600 focus:ring-sky-500 h-4 w-4">
+                <span class="text-slate-800 font-medium">Daikin</span>
+              </label>
+              <label class="flex items-center space-x-2 p-2 rounded-lg bg-slate-50 border border-slate-200 hover:border-sky-400 cursor-pointer">
+                <input type="checkbox" name="currentBrands" value="Mitsubishi Electric" class="rounded text-sky-600 focus:ring-sky-500 h-4 w-4">
+                <span class="text-slate-800 font-medium">Mitsubishi Electric</span>
+              </label>
+              <label class="flex items-center space-x-2 p-2 rounded-lg bg-slate-50 border border-slate-200 hover:border-sky-400 cursor-pointer">
+                <input type="checkbox" name="currentBrands" value="Carrier" class="rounded text-sky-600 focus:ring-sky-500 h-4 w-4">
+                <span class="text-slate-800 font-medium">Carrier</span>
+              </label>
+              <label class="flex items-center space-x-2 p-2 rounded-lg bg-slate-50 border border-slate-200 hover:border-sky-400 cursor-pointer">
+                <input type="checkbox" name="currentBrands" value="Haier" class="rounded text-sky-600 focus:ring-sky-500 h-4 w-4">
+                <span class="text-slate-800 font-medium">Haier</span>
+              </label>
+              <label class="flex items-center space-x-2 p-2 rounded-lg bg-slate-50 border border-slate-200 hover:border-sky-400 cursor-pointer">
+                <input type="checkbox" name="currentBrands" value="Panasonic" class="rounded text-sky-600 focus:ring-sky-500 h-4 w-4">
+                <span class="text-slate-800 font-medium">Panasonic</span>
+              </label>
+              <label class="flex items-center space-x-2 p-2 rounded-lg bg-slate-50 border border-slate-200 hover:border-sky-400 cursor-pointer">
+                <input type="checkbox" name="currentBrands" value="Central Air" class="rounded text-sky-600 focus:ring-sky-500 h-4 w-4">
+                <span class="text-slate-800 font-medium">Central Air</span>
+              </label>
+              <label class="flex items-center space-x-2 p-2 rounded-lg bg-slate-50 border border-slate-200 hover:border-sky-400 cursor-pointer">
+                <input type="checkbox" name="currentBrands" value="TCL" class="rounded text-sky-600 focus:ring-sky-500 h-4 w-4">
+                <span class="text-slate-800 font-medium">TCL</span>
+              </label>
+              <label class="flex items-center space-x-2 p-2 rounded-lg bg-slate-50 border border-slate-200 hover:border-sky-400 cursor-pointer">
+                <input type="checkbox" name="currentBrands" value="แบรนด์อื่นๆ" class="rounded text-sky-600 focus:ring-sky-500 h-4 w-4">
+                <span class="text-slate-800 font-medium">แบรนด์อื่นๆ</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Product Types Dealer Interested in Ordering -->
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-2">
+              ประเภทสินค้าและแอร์ที่ท่านสนใจเปิดบัญชีดีลเลอร์สั่งซื้อ (เลือกได้หลายข้อ)
+            </label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-sm">
+              <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-slate-50 cursor-pointer">
+                <input type="checkbox" name="interestedProducts" value="แอร์ติดผนัง (Wall Type Inverter)" class="rounded text-sky-600 focus:ring-sky-500 h-4 w-4">
+                <span class="text-slate-700">แอร์ติดผนังสำหรับบ้านและคอนโด (Wall Type Inverter)</span>
+              </label>
+              <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-slate-50 cursor-pointer">
+                <input type="checkbox" name="interestedProducts" value="แอร์แขวน/ฝังฝ้า 4 ทิศทาง (Cassette/Ceiling)" class="rounded text-sky-600 focus:ring-sky-500 h-4 w-4">
+                <span class="text-slate-700">แอร์แขวนใต้ฝ้า / ฝังฝ้า 4 ทิศทาง (Cassette Type)</span>
+              </label>
+              <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-slate-50 cursor-pointer">
+                <input type="checkbox" name="interestedProducts" value="แอร์เชิงพาณิชย์ & VRV/VRF" class="rounded text-sky-600 focus:ring-sky-500 h-4 w-4">
+                <span class="text-slate-700">ระบบแอร์เชิงพาณิชย์ & VRV/VRF สำหรับอาคาร</span>
+              </label>
+              <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-slate-50 cursor-pointer">
+                <input type="checkbox" name="interestedProducts" value="ท่อทองแดง สายไฟ รางครอบท่อ และอุปกรณ์ติดตั้ง" class="rounded text-sky-600 focus:ring-sky-500 h-4 w-4">
+                <span class="text-slate-700">ท่อทองแดง รางครอบท่อ ขาแขวน และวัสดุติดตั้งแอร์</span>
+              </label>
+              <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-slate-50 cursor-pointer">
+                <input type="checkbox" name="interestedProducts" value="น้ำยาแอร์ R32/R410A และเครื่องมือช่าง" class="rounded text-sky-600 focus:ring-sky-500 h-4 w-4">
+                <span class="text-slate-700">น้ำยาแอร์ (R32, R410A) เกจวัดน้ำยา และเครื่องมือช่างแอร์</span>
+              </label>
+              <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-slate-50 cursor-pointer">
+                <input type="checkbox" name="interestedProducts" value="รับงานส่งต่อติดตั้ง/ซ่อมในพื้นที่" class="rounded text-sky-600 focus:ring-sky-500 h-4 w-4">
+                <span class="text-slate-700">สนใจรับคิวงานติดตั้งหรือล้างแอร์ที่บริษัทส่งต่อให้ในพื้นที่</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Notes / Additional Questions -->
+          <div>
+            <label for="notes" class="block text-sm font-medium text-slate-700 mb-1">
+              เงื่อนไขที่ต้องการ หรือข้อสอบถามเพิ่มเติม
+            </label>
+            <textarea 
+              id="notes" 
+              name="notes" 
+              rows="3" 
+              placeholder="เช่น ต้องการทราบราคาตัดยอดล็อต 10 เครื่อง, สอบถามเงื่อนไขเครดิตเทอม 30 วัน หรือต้องการให้ส่งแคตตาล็อกราคาช่างแอร์ทาง LINE..."
+              class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none form-input-focus text-slate-800 bg-slate-50/50"
+            ></textarea>
+          </div>
+
+          <!-- Consent Checkbox -->
+          <div class="pt-2">
+            <label class="flex items-start gap-2.5 cursor-pointer">
+              <input type="checkbox" id="consent" required class="rounded text-sky-600 focus:ring-sky-500 h-4 w-4 mt-1">
+              <span class="text-xs text-slate-600 leading-normal">
+                ข้าพเจ้ายินยอมให้ส่งข้อมูลร้านค้าและเบอร์โทรศัพท์ เพื่อรับตารางราคาส่งเครื่องปรับอากาศ แคตตาล็อกสินค้า และการติดต่อประสานงานตัวแทนจำหน่าย <span class="text-rose-500">*</span>
+              </span>
+            </label>
+            <p class="hidden text-xs text-rose-500 mt-1" id="consentError">กรุณากดยินยอมก่อนส่งข้อมูล</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-xs text-slate-400 order-2 sm:order-1 text-center sm:text-left flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          ข้อมูลจะถูกส่งเข้า Google Sheet ทันทีที่กดส่ง
+        </p>
+
+        <button 
+          type="submit" 
+          id="submitBtn"
+          class="order-1 sm:order-2 w-full sm:w-auto min-w-[220px] px-8 py-3.5 bg-gradient-to-r from-sky-600 to-blue-700 hover:from-sky-700 hover:to-blue-800 text-white font-heading font-medium rounded-xl shadow-lg shadow-sky-600/25 hover:shadow-xl hover:shadow-sky-600/35 transition-all transform active:scale-95 flex items-center justify-center gap-2"
+        >
+          <svg id="submitSpinner" class="hidden animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span id="submitBtnText">ส่งข้อมูลสมัครตัวแทนแอร์</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+          </svg>
+        </button>
+      </div>
+    </form>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-auto py-6 text-center text-xs text-slate-400 border-t border-slate-200 bg-white">
+    <p>© 2026 เครือข่ายตัวแทนจำหน่ายเครื่องปรับอากาศ (HVAC Dealer Network) • ส่งข้อมูลตรงสู่ Google Sheets</p>
+  </footer>
+
+  <!-- Success Modal -->
+  <div id="successModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 text-center shadow-2xl transform transition-all">
+      <div class="w-16 h-16 bg-sky-100 text-sky-600 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h3 class="font-heading font-bold text-2xl text-slate-800 mb-2">ลงทะเบียนสำเร็จ!</h3>
+      <p class="text-sm text-slate-600 mb-6 leading-relaxed">
+        ระบบได้บันทึกข้อมูลร้านแอร์ <span id="confirmedStoreName" class="font-semibold text-slate-900"></span> เข้า Google Sheet เรียบร้อยแล้ว ฝ่ายขายและวิศวกรฝ่ายเทคนิคจะติดต่อกลับพร้อมส่งแคตตาล็อกราคาส่งให้ท่าน
+      </p>
+
+      <div class="bg-slate-50 rounded-2xl p-4 text-left text-xs space-y-2 mb-6 border border-slate-100 text-slate-600">
+        <div class="flex justify-between">
+          <span>ผู้ติดต่อ:</span>
+          <span id="confirmedContact" class="font-medium text-slate-800"></span>
+        </div>
+        <div class="flex justify-between">
+          <span>เบอร์ติดต่อ:</span>
+          <span id="confirmedPhone" class="font-medium text-slate-800"></span>
+        </div>
+        <div class="flex justify-between">
+          <span>เวลาบันทึก:</span>
+          <span id="confirmedTime" class="font-medium text-slate-800"></span>
+        </div>
+      </div>
+
+      <button 
+        type="button" 
+        id="closeSuccessBtn"
+        class="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white font-medium rounded-xl text-sm transition-colors shadow-md"
+      >
+        ตกลง / ปิดหน้าต่าง
+      </button>
+    </div>
+  </div>
+
+  <!-- Google Sheets Integration Guide & Webhook Settings Modal -->
+  <div id="configModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-7 shadow-2xl my-8">
+      
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-slate-800 text-lg">การเชื่อมต่อ Google Sheets สำหรับร้านแอร์</h3>
+            <p class="text-xs text-slate-500">วิธีตั้งค่าให้ข้อมูล Dealer แอร์ บันทึกลง Sheet ทันทีแบบ Real-time</p>
+          </div>
+        </div>
+        <button id="closeConfigBtn" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Current Webhook Input -->
+      <div class="mb-5 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+        <label for="webhookUrlInput" class="block text-xs font-semibold text-slate-700 mb-1">
+          Google Apps Script Web App URL:
+        </label>
+        <div class="flex gap-2">
+          <input 
+            type="url" 
+            id="webhookUrlInput" 
+            placeholder="https://script.google.com/macros/s/.../exec"
+            class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:outline-none form-input-focus bg-white"
+          />
+          <button 
+            type="button" 
+            id="saveWebhookBtn" 
+            class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-medium shrink-0 transition-colors"
+          >
+            บันทึก URL
+          </button>
+        </div>
+        <p class="text-[11px] text-slate-500 mt-1.5">
+          *หากยังไม่ได้กรอก URL ระบบจะทำงานในโหมดจำลอง (Demo Mode) ให้คุณทดสอบการกรอกได้ทันที
+        </p>
+      </div>
+
+      <!-- Instructions & Copyable Apps Script Code -->
+      <div class="space-y-3 text-xs text-slate-600">
+        <h4 class="font-heading font-semibold text-slate-800 text-sm">ขั้นตอนการติดตั้ง (ใช้เวลา 2 นาที):</h4>
+        <ol class="list-decimal list-inside space-y-1.5 pl-1 leading-relaxed">
+          <li>เปิด <a href="https://sheets.new" target="_blank" class="text-sky-600 underline font-medium">Google Sheets แผ่นใหม่ (sheets.new)</a></li>
+          <li>ไปที่เมนู <strong>ส่วนขยาย (Extensions)</strong> &gt; <strong>Apps Script</strong></li>
+          <li>ลบโค้ดเดิมออกทั้งหมด แล้วนำโค้ดสำหรับร้านแอร์ด้านล่างนี้ไปวาง:</li>
+        </ol>
+
+        <!-- Code Block -->
+        <div class="relative">
+          <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl font-mono text-[11px] overflow-x-auto max-h-52 border border-slate-800"><code id="gasCodeText">function doPost(e) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var data = JSON.parse(e.postData.contents);
+    
+    // สร้างหัวตารางอัตโนมัติหากเป็นชีทใหม่
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow([
+        "วันที่-เวลา", 
+        "ชื่อร้านค้า/บริษัทแอร์", 
+        "ชื่อผู้ติดต่อ", 
+        "เบอร์โทรติดต่อ", 
+        "LINE ID", 
+        "เลขประจำตัวผู้เสียภาษี", 
+        "ที่อยู่/โกดัง", 
+        "ตำบล/แขวง", 
+        "อำเภอ/เขต", 
+        "จังหวัด", 
+        "รหัสไปรษณีย์", 
+        "Google Maps",
+        "ลักษณะบริการของร้าน", 
+        "จำนวนทีมช่างติดตั้ง", 
+        "ยอดจำหน่ายเฉลี่ย (เครื่อง/ด.)", 
+        "แบรนด์แอร์ที่ขายปัจจุบัน", 
+        "สินค้าที่สนใจสั่งซื้อ", 
+        "หมายเหตุ/เงื่อนไขที่ต้องการ"
+      ]);
+      // ปรับแต่งสีหัวตาราง
+      sheet.getRange(1, 1, 1, 18).setBackground("#0369a1").setFontColor("#FFFFFF").setFontWeight("bold");
+    }
+    
+    // บันทึกแถวข้อมูลร้านแอร์ใหม่
+    sheet.appendRow([
+      new Date(),
+      data.storeName,
+      data.contactName,
+      data.phone,
+      data.lineId || "-",
+      data.taxId || "-",
+      data.address,
+      data.subdistrict,
+      data.district,
+      data.province,
+      data.postalCode,
+      data.mapUrl || "-",
+      data.businessType,
+      data.technicianCount,
+      data.monthlySales,
+      (data.currentBrands || []).join(", "),
+      (data.interestedProducts || []).join(", "),
+      data.notes || "-"
+    ]);
+    
+    return ContentService.createTextOutput(JSON.stringify({ status: "success" }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ status: "error", message: err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}</code></pre>
+          <button 
+            type="button" 
+            id="copyCodeBtn"
+            class="absolute top-2 right-2 px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-md text-[11px] font-medium transition-colors"
+          >
+            คัดลอกโค้ด
+          </button>
+        </div>
+
+        <ol start="4" class="list-decimal list-inside space-y-1.5 pl-1 leading-relaxed">
+          <li>กด <strong>ทำให้ใช้งานได้ (Deploy)</strong> &gt; <strong>การทำให้ใช้งานได้รายการใหม่ (New deployment)</strong></li>
+          <li>เลือกประเภท <strong>เว็บแอป (Web app)</strong></li>
+          <li>ตั้งค่า <strong>ผู้ที่มีสิทธิ์เข้าถึง (Who has access)</strong> เป็น <strong class="text-rose-600">ทุกคน (Anyone)</strong></li>
+          <li>กด <strong>Deploy</strong> แล้วคัดลอก <strong>Web app URL</strong> มาใส่ในช่องด้านบน</li>
+        </ol>
+      </div>
+
+      <div class="mt-6 pt-4 border-t border-slate-100 flex justify-end">
+        <button 
+          type="button" 
+          onclick="document.getElementById('configModal').classList.add('hidden'); document.getElementById('configModal').classList.remove('flex');"
+          class="px-5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-medium"
+        >
+          ปิดหน้าต่าง
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Floating Toast Alert -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 max-w-sm w-full bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl border border-slate-700 transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-3">
+    <div id="toastIcon" class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+    </div>
+    <div class="text-xs">
+      <div id="toastTitle" class="font-semibold text-slate-100">บันทึกเรียบร้อย</div>
+      <div id="toastMessage" class="text-slate-400">ดำเนินการเรียบร้อยแล้ว</div>
+    </div>
+  </div>
+
+  <script>
+    // State management
+    let googleSheetWebhookUrl = "";
+
+    // DOM Elements
+    const form = document.getElementById('dealerSurveyForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const submitBtnText = document.getElementById('submitBtnText');
+    const submitSpinner = document.getElementById('submitSpinner');
+    const successModal = document.getElementById('successModal');
+    const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+    const configModal = document.getElementById('configModal');
+    const openConfigBtn = document.getElementById('openConfigBtn');
+    const closeConfigBtn = document.getElementById('closeConfigBtn');
+    const webhookUrlInput = document.getElementById('webhookUrlInput');
+    const saveWebhookBtn = document.getElementById('saveWebhookBtn');
+    const webhookStatusBanner = document.getElementById('webhookStatusBanner');
+    const webhookStatusText = document.getElementById('webhookStatusText');
+    const copyCodeBtn = document.getElementById('copyCodeBtn');
+
+    // Toast helper
+    function showToast(title, message, isError = false) {
+      const toast = document.getElementById('toast');
+      const toastTitle = document.getElementById('toastTitle');
+      const toastMessage = document.getElementById('toastMessage');
+      const toastIcon = document.getElementById('toastIcon');
+
+      toastTitle.textContent = title;
+      toastMessage.textContent = message;
+
+      if (isError) {
+        toastIcon.className = "w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center shrink-0";
+        toastIcon.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>`;
+      } else {
+        toastIcon.className = "w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0";
+        toastIcon.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>`;
+      }
+
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3500);
+    }
+
+    // Modal helpers
+    openConfigBtn.addEventListener('click', () => {
+      webhookUrlInput.value = googleSheetWebhookUrl;
+      configModal.classList.remove('hidden');
+      configModal.classList.add('flex');
+    });
+
+    closeConfigBtn.addEventListener('click', () => {
+      configModal.classList.add('hidden');
+      configModal.classList.remove('flex');
+    });
+
+    // Save Webhook URL in memory
+    saveWebhookBtn.addEventListener('click', () => {
+      const url = webhookUrlInput.value.trim();
+      googleSheetWebhookUrl = url;
+      updateWebhookUI();
+      configModal.classList.add('hidden');
+      configModal.classList.remove('flex');
+      showToast("บันทึก URL สำเร็จ", url ? "เชื่อมต่อ Google Sheet พร้อมใช้งาน" : "กลับสู่โหมดจำลอง (Demo)");
+    });
+
+    function updateWebhookUI() {
+      if (googleSheetWebhookUrl) {
+        webhookStatusText.textContent = "เชื่อมต่อ Google Sheets Web App แล้ว (ข้อมูลจะถูกบันทึกจริง)";
+        webhookStatusBanner.className = "mb-6 p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/90 flex items-center justify-between text-xs text-emerald-800";
+      } else {
+        webhookStatusText.textContent = "โหมดทดสอบ: ยังไม่ได้ใส่ Google Sheet URL (สามารถกดส่งเพื่อดูผลลัพธ์ได้)";
+        webhookStatusBanner.className = "mb-6 p-3.5 rounded-xl border border-amber-200 bg-amber-50/90 flex items-center justify-between text-xs text-amber-800";
+      }
+    }
+
+    // Copy Apps Script code using safe execCommand
+    copyCodeBtn.addEventListener('click', () => {
+      const code = document.getElementById('gasCodeText').innerText;
+      const textArea = document.createElement('textarea');
+      textArea.value = code;
+      textArea.style.position = 'fixed';
+      textArea.style.opacity = '0';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        copyCodeBtn.textContent = "คัดลอกแล้ว!";
+        copyCodeBtn.classList.add('bg-emerald-600', 'text-white');
+        setTimeout(() => {
+          copyCodeBtn.textContent = "คัดลอกโค้ด";
+          copyCodeBtn.classList.remove('bg-emerald-600', 'text-white');
+        }, 2000);
+      } catch (err) {
+        showToast("ไม่สามารถคัดลอกได้", "กรุณาลากคลุมและคัดลอกด้วยตนเอง", true);
+      }
+      document.body.removeChild(textArea);
+    });
+
+    // Close success modal
+    closeSuccessBtn.addEventListener('click', () => {
+      successModal.classList.add('hidden');
+      successModal.classList.remove('flex');
+      form.reset();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    function validateForm() {
+      let isValid = true;
+
+      // Store Name
+      const storeName = document.getElementById('storeName');
+      const storeNameError = document.getElementById('storeNameError');
+      if (!storeName.value.trim()) {
+        storeNameError.classList.remove('hidden');
+        storeName.classList.add('border-rose-400', 'bg-rose-50/30');
+        isValid = false;
+      } else {
+        storeNameError.classList.add('hidden');
+        storeName.classList.remove('border-rose-400', 'bg-rose-50/30');
+      }
+
+      // Contact Name
+      const contactName = document.getElementById('contactName');
+      const contactNameError = document.getElementById('contactNameError');
+      if (!contactName.value.trim()) {
+        contactNameError.classList.remove('hidden');
+        contactName.classList.add('border-rose-400', 'bg-rose-50/30');
+        isValid = false;
+      } else {
+        contactNameError.classList.add('hidden');
+        contactName.classList.remove('border-rose-400', 'bg-rose-50/30');
+      }
+
+      // Phone (9-10 digits, Thai formats)
+      const phone = document.getElementById('phone');
+      const phoneError = document.getElementById('phoneError');
+      const phoneClean = phone.value.replace(/[^0-9]/g, '');
+      if (phoneClean.length < 9 || phoneClean.length > 10) {
+        phoneError.classList.remove('hidden');
+        phone.classList.add('border-rose-400', 'bg-rose-50/30');
+        isValid = false;
+      } else {
+        phoneError.classList.add('hidden');
+        phone.classList.remove('border-rose-400', 'bg-rose-50/30');
+      }
+
+      // Address
+      const address = document.getElementById('address');
+      const addressError = document.getElementById('addressError');
+      if (!address.value.trim()) {
+        addressError.classList.remove('hidden');
+        address.classList.add('border-rose-400', 'bg-rose-50/30');
+        isValid = false;
+      } else {
+        addressError.classList.add('hidden');
+        address.classList.remove('border-rose-400', 'bg-rose-50/30');
+      }
+
+      // Location fields (subdistrict, district, province, postalCode)
+      const subdistrict = document.getElementById('subdistrict').value.trim();
+      const district = document.getElementById('district').value.trim();
+      const province = document.getElementById('province').value.trim();
+      const postalCode = document.getElementById('postalCode').value.trim();
+      const locationError = document.getElementById('locationError');
+
+      if (!subdistrict || !district || !province || !postalCode) {
+        locationError.classList.remove('hidden');
+        isValid = false;
+      } else {
+        locationError.classList.add('hidden');
+      }
+
+      // Consent
+      const consent = document.getElementById('consent');
+      const consentError = document.getElementById('consentError');
+      if (!consent.checked) {
+        consentError.classList.remove('hidden');
+        isValid = false;
+      } else {
+        consentError.classList.add('hidden');
+      }
+
+      return isValid;
+    }
+
+    // Phone auto formatting (e.g. 081-234-5678)
+    const phoneInput = document.getElementById('phone');
+    phoneInput.addEventListener('input', (e) => {
+      let val = e.target.value.replace(/\D/g, '');
+      if (val.length > 10) val = val.substring(0, 10);
+      e.target.value = val;
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!validateForm()) {
+        showToast("กรอกข้อมูลไม่ครบถ้วน", "กรุณาตรวจสอบช่องที่มีเครื่องหมายดอกจันสีแดง", true);
+        return;
+      }
+
+      // Gather form values
+      const formData = new FormData(form);
+      const interestedProducts = [];
+      document.querySelectorAll('input[name="interestedProducts"]:checked').forEach(cb => {
+        interestedProducts.push(cb.value);
+      });
+
+      const currentBrands = [];
+      document.querySelectorAll('input[name="currentBrands"]:checked').forEach(cb => {
+        currentBrands.push(cb.value);
+      });
+
+      const payload = {
+        storeName: formData.get('storeName').trim(),
+        contactName: formData.get('contactName').trim(),
+        phone: formData.get('phone').trim(),
+        lineId: formData.get('lineId') ? formData.get('lineId').trim() : '',
+        taxId: formData.get('taxId') ? formData.get('taxId').trim() : '',
+        address: formData.get('address').trim(),
+        subdistrict: formData.get('subdistrict').trim(),
+        district: formData.get('district').trim(),
+        province: formData.get('province').trim(),
+        postalCode: formData.get('postalCode').trim(),
+        mapUrl: formData.get('mapUrl') ? formData.get('mapUrl').trim() : '',
+        businessType: formData.get('businessType'),
+        technicianCount: formData.get('technicianCount'),
+        monthlySales: formData.get('monthlySales'),
+        currentBrands: currentBrands,
+        interestedProducts: interestedProducts,
+        notes: formData.get('notes') ? formData.get('notes').trim() : ''
+      };
+
+      // Set Loading state
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
+      submitSpinner.classList.remove('hidden');
+      submitBtnText.textContent = "กำลังส่งข้อมูลเข้า Google Sheets...";
+
+      try {
+        if (googleSheetWebhookUrl) {
+          // Send to Google Sheets Web App via POST request
+          await fetch(googleSheetWebhookUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+              'Content-Type': 'text/plain;charset=utf-8',
+            },
+            body: JSON.stringify(payload)
+          });
+        } else {
+          // Simulated delay for demonstration mode
+          await new Promise(resolve => setTimeout(resolve, 800));
+        }
+
+        // Populate Success Modal
+        document.getElementById('confirmedStoreName').textContent = payload.storeName;
+        document.getElementById('confirmedContact').textContent = payload.contactName;
+        document.getElementById('confirmedPhone').textContent = payload.phone;
+        document.getElementById('confirmedTime').textContent = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' น.';
+
+        successModal.classList.remove('hidden');
+        successModal.classList.add('flex');
+      } catch (err) {
+        showToast("ส่งข้อมูลไม่สำเร็จ", "กรุณาตรวจสอบสัญญาณอินเทอร์เน็ตหรือ Webhook URL", true);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+        submitSpinner.classList.add('hidden');
+        submitBtnText.textContent = "ส่งข้อมูลสมัครตัวแทนแอร์";
+      }
+    });
+
+    // Initial setup
+    updateWebhookUI();
+  </script>
+</body>
+</html>
